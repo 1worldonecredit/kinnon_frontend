@@ -1,0 +1,538 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* วางโค้ด CSS ของคุณต่อจากบรรทัดนี้ได้เลย */
+/* =========================================
+   1. Base & Variables (ลบ Layout ที่ซ้ำซ้อนออก)
+========================================= */
+* {
+  box-sizing: border-box;
+}
+
+/* เก็บตัวแปรสีและขนาดของเดิมไว้ (ไม่กระทบ Master) */
+:root {
+  --primary-color: #d11010;
+  --bg-color: #f4f6f8;
+  --nav-height: 65px;
+  --bottom-nav-height: 75px;
+}
+
+/* =========================================
+   2. Top Navbar (ตัด position: sticky ที่ทำให้หลุดกรอบออก)
+========================================= */
+.top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: var(--nav-height);
+  flex-shrink: 0; 
+  background-color: transparent; /* ให้โปร่งแสงกลืนไปกับ Master */
+  z-index: 100;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.greeting p { margin: 0; font-size: 12px; color: #cbd5e1; }
+.greeting h4 { margin: 0; font-size: 14px; color: #ffffff; }
+.top-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  color: #ffffff;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.nav-logo {
+  margin: 0;
+  cursor: pointer;
+  color: var(--primary-color);
+  font-weight: 800;
+}
+.btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border-radius: 20px; 
+}
+.btn-game {
+  background: none;
+  color: #4caf50;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.btn-lang {
+  background: none;
+  color: #cbd5e1;
+  border: 1px solid #475569;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.btn-login-nav {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.cyber-hex-bg {
+  /* เปลี่ยน URL เป็นที่อยู่รูปภาพพื้นหลังลวดลายหกเหลี่ยมของคุณในโฟลเดอร์ public */
+  background-image: url('/hex-background.jpg'); 
+  background-color: #050b14;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.cyber-input {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid #00e5ff !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  padding: 12px 15px;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+.cyber-input:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+
+.cyber-btn {
+  background-color: #00e5ff;
+  background: linear-gradient(90deg, #00b4d8 0%, #00e5ff 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  padding: 12px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4);
+  transition: transform 0.2s;
+}
+
+.cyber-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.6);
+}
+/* =========================================
+   3. Bottom Navbar (ปรับสีให้เข้ากับธีมอวกาศ)
+========================================= */
+.bottom-navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: var(--bottom-nav-height);
+  flex-shrink: 0; 
+  
+  /* 🌟 เปลี่ยนจากสีแดง เป็นกระจกใสโทนอวกาศ */
+  background: rgba(5, 16, 23, 0.95) !important; 
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-top: 1px solid rgba(0, 240, 255, 0.2) !important; /* เพิ่มเส้นขอบบนสีฟ้าไซอันบางๆ */
+  
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 1000 !important;
+  border-top-left-radius: 20px !important; 
+  border-top-right-radius: 20px !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5) !important;
+  width: 100% !important;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #94a3b8; /* สีเทาสว่างเวลาไม่ได้เลือก */
+  font-size: 11px;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+/* 🌟 เปลี่ยนสีเวลาถูกเลือก (Active) ให้เป็นสีฟ้าไซอันเรืองแสง */
+.nav-item.active, .nav-item:hover { 
+  color: #00e5ff; 
+  transform: translateY(-3px);
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); /* เพิ่มเอฟเฟกต์เรืองแสงเบาๆ */
+}
+
+/* =========================================
+   4. Auth Pages (PreLogin, Login, Register)
+========================================= */
+.page-center-vh {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%; 
+  text-align: center;
+  padding: 20px 0;
+}
+.page-center-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 340px; 
+  margin: 0 auto;
+}
+
+/* ⚠️ ลบ .auth-input ออกจากที่นี่ เพราะใน master-theme.css เราจัดการให้เป็นกระจกใสไปแล้ว */
+
+.btn-submit {
+  padding: 12px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+}
+.btn-primary { background-color: var(--primary-color); }
+.btn-success { background-color: #28a745; }
+.btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
+
+.referrer-box {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.referrer-label {
+  font-size: 14px;
+  color: #cbd5e1;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.status-text {
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+  text-align: left;
+}
+.text-gray { color: gray; }
+.text-green { color: #4ade80; }
+.text-red { color: #f87171; }
+.mt-20 { margin-top: 20px; }
+
+/* =========================================
+   5. Dashboard Styles (หน้าหลักหลัง Login)
+========================================= */
+.welcome-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.welcome-text p { margin: 0; font-size: 12px; color: #cbd5e1; }
+.welcome-text h4 { margin: 0; font-size: 15px; color: #ffffff; font-weight: 700; }
+/* =========================================
+   การ์ดกระเป๋าเงินรวม (ขยายภาพพื้นหลังให้เต็มตา)
+========================================= */
+/* =========================================
+   การ์ดกระเป๋าเงินรวม (แก้ไขความสูงและดันข้อความลงล่างสุด)
+========================================= */
+.unified-wallet-card {
+  background-image: url('/WalletCard.jpg') !important; 
+  background-size: cover !important;
+  background-position: center top !important; 
+  border-radius: 20px !important;
+  
+  /* 🌟 บังคับความสูงตายตัว เพื่อให้มีพื้นที่โชว์โลโก้ด้านบน */
+  height: 200px !important; 
+  padding: 20px !important; 
+  
+  display: flex !important;
+  flex-direction: column !important;
+  /* 🌟 ผลักเนื้อหา (ตัวเลขยอดเงินและปุ่ม) ลงไปกองติดขอบล่างสุด */
+  justify-content: flex-end !important; 
+  gap: 15px !important; 
+  
+  position: relative !important;
+  overflow: hidden !important;
+  margin-bottom: 25px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important; 
+}
+
+.unified-wallet-card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+  /* 🌟 ไล่สีดำเฉพาะ "ครึ่งล่าง" ปล่อยพื้นที่ครึ่งบนให้โปร่งใส 100% เพื่อโชว์โลโก้ */
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,0.85) 100%) !important;
+  z-index: 1 !important;
+}
+
+.unified-wallet-card > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.wallet-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; 
+}
+.wallet-balance p { margin: 0 0 35px 0; font-size: 20px; opacity: 0.9; color: #cbd5e1; }
+.wallet-balance h2 { margin: 28; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+
+.wallet-points { text-align: right; }
+.wallet-points p { margin: 0 0 4px 0; font-size: 12px; opacity: 0.9; }
+.wallet-points h3 { 
+  margin: 0; 
+  font-size: 16px; 
+  font-weight: 700; 
+  color: #ffd700; 
+  background: rgba(0,0,0,0.4); 
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.card-actions-row {
+  display: flex;
+  gap: 15px;
+}
+.card-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(8px); 
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 12px;
+  border-radius: 14px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.card-action-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+  color: #ffffff; /* เปลี่ยนเป็นสีขาวให้เข้ากับธีมอวกาศ */
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 15px 10px;
+  margin-bottom: 25px;
+}
+.service-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.service-icon-box {
+  width: 55px;
+  height: 55px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.service-item:hover .service-icon-box {
+  transform: translateY(-3px);
+  border-color: var(--primary-color);
+}
+.service-name {
+  font-size: 11px;
+  color: #cbd5e1; /* ปรับสีตัวอักษรให้อ่านง่ายบนพื้นหลังอวกาศ */
+  text-align: center;
+  line-height: 1.2;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* =========================================
+   7. 📱 ปรับขนาดตัวอักษรและสี สำหรับ Tablet / Desktop
+========================================= */
+@media (min-width: 768px) {
+  /* 1. ขยายหัวข้อต่างๆ (เช่น บริการยอดฮิต, รายการล่าสุด) */
+  .section-title {
+    font-size: 18px !important;
+  }
+
+  /* 2. ขยายชื่อเมนูบริการ (ใต้ Icon) */
+  .service-name {
+    font-size: 14px !important;
+    font-weight: bold !important;
+  }
+  .service-icon-box {
+    width: 65px !important;
+    height: 65px !important;
+  }
+  
+  /* 3. 🌟 ดักจับและขยายตัวอักษรใน "รายการล่าสุด" (ทับ Inline Style เดิม) */
+  /* ชื่อรายการ (เช่น ซื้อหวยรัฐบาลไทย) */
+  .main-content div[style*="background-color: white"] > div > div > p:first-child {
+    font-size: 16px !important;
+    color: #111827 !important; /* ปรับสีดำให้เข้มและคมชัดขึ้น */
+  }
+  
+  /* วันที่ทำรายการ */
+  .main-content div[style*="background-color: white"] > div > div > p:last-child {
+    font-size: 13px !important;
+    color: #64748b !important; /* ปรับสีเทาให้อ่านง่ายขึ้น ไม่กลืนกับพื้นขาว */
+  }
+
+  /* ตัวเลขยอดเงิน (+ / -) */
+  .main-content div[style*="background-color: white"] > div > div:last-child {
+    font-size: 17px !important; /* ขยายตัวเลขยอดเงินให้ใหญ่สะใจ */
+  }
+
+  /* 4. ขยายตัวอักษรบนบัตร Wallet ด้านบนสุด */
+  .wallet-balance p, .wallet-points p { 
+    font-size: 14px !important; 
+    color: #cbd5e1;
+  }
+  .wallet-balance h2 { 
+    font-size: 28px !important; 
+  }
+  .wallet-points h3 { 
+    font-size: 18px !important; 
+  }
+  .card-action-btn { 
+    font-size: 15px !important; 
+    padding: 14px !important; 
+  }
+}
+
+/* =========================================
+   🔧 จัดการ Layout โครงสร้างหลัก (แก้ปัญหา Navbar ทับเนื้อหา)
+========================================= */
+/* กรอบหลัก: บังคับให้เรียงจากบนลงล่างอย่างเป็นระเบียบ */
+.app-container {
+  display: flex !important;
+  flex-direction: column !important; /* ให้เรียง TopNav -> Content -> BottomNav */
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  min-height: 100vh !important;
+  background: transparent !important;
+}
+
+/* ล็อค Top Navbar ให้อยู่บนสุดเสมอ (แต่ยังอยู่ในกรอบ 1200px) */
+.top-navbar, .top-navbar-theme {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  /* ลบคำสั่ง position: fixed และ transform ออกทั้งหมดเพื่อไม่ให้พัง */
+}
+
+/* ล็อค Bottom Navbar ให้อยู่ล่างสุดเสมอ */
+.bottom-navbar, .bottom-navbar-theme {
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+}
+
+/* พื้นที่เนื้อหาหลัก (จะถูกดันให้อยู่ระหว่าง Top และ Bottom อัตโนมัติ) */
+.main-content {
+  flex: 1 !important; /* บังคับให้กินพื้นที่ว่างตรงกลางทั้งหมด */
+  overflow-y: auto !important;
+  width: 100% !important;
+}
+
+/* =========================================
+   📱 โหมด Tablet / Desktop (ขยายให้เกือบเต็มจอ)
+========================================= */
+@media (min-width: 768px) {
+  /* 1. ขยายเนื้อหาหลักให้เกือบเต็มจอ */
+  .main-content {
+    max-width: 95% !important; /* 🌟 ขยายจาก 600px เป็น 95% เพื่อให้กางออกเกือบเต็มจอ */
+    width: 1000px !important;  /* จำกัดความกว้างสูงสุดไม่ให้ทะลุกรอบ */
+    margin: 0 auto !important;
+    padding: 30px 20px !important;
+  }
+
+  /* 2. ขยายขนาดการ์ด Wallet ให้สมดุลกับความกว้างใหม่ */
+  .unified-wallet-card {
+    height: 350px !important; 
+    padding: 30px 40px !important; /* เพิ่มระยะขอบซ้ายขวาด้านในไม่ให้ข้อความชิดขอบเกินไป */
+  }
+  .wallet-balance h2 { font-size: 38px !important; }
+  .wallet-points h3 { font-size: 22px !important; }
+  .card-action-btn { font-size: 16px !important; padding: 16px !important; }
+
+  /* 3. ขยายและถ่างระยะ Grid เมนูยอดฮิต */
+  .services-grid {
+    gap: 30px 20px !important; /* 🌟 ถ่างระยะห่างไอคอนให้กระจายตัวสวยงามขึ้น */
+  }
+  .service-icon-box {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  .service-icon-box svg {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .service-name {
+    font-size: 15px !important;
+    font-weight: bold !important;
+  }
+
+  /* 4. ขยายหัวข้อ */
+  .section-title {
+    font-size: 22px !important;
+    margin-bottom: 20px !important;
+  }
+}
+
