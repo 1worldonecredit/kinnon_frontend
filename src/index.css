@@ -95,7 +95,7 @@
 .cyber-hex-bg {
   /* เปลี่ยน URL เป็นที่อยู่รูปภาพพื้นหลังลวดลายหกเหลี่ยมของคุณในโฟลเดอร์ public */
   background-image: url('/hex-background.jpg'); 
-  background-color: #050b14;
+  background-color: #14243a;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
