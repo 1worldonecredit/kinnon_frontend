@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, MessageSquare, Users, Settings, LogOut, X, Bell, Camera, Save, XCircle, CheckCircle2 } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.salapi.company';
+const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
