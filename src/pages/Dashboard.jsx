@@ -1,13 +1,243 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TopNavbar from '../components/TopNavbar';
+import BottomNavbar from '../components/BottomNavbar';
+import { 
+  Building2, Plane, Tent, Home, Car, CarFront, 
+  Wifi, TrainFront, BusFront, Gift, Clock, 
+  ChevronRight, Ticket, Percent, Flame
+} from 'lucide-react'; 
 
-function Dashboard() {
+const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+  
+  const [userData, setUserData] = useState({});
+  const [wallet, setWallet] = useState({ balance: 0, points: 0 });
+  const [transactions, setTransactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [rejectedCount, setRejectedCount] = useState(0);
+
+  // 🌟 ปรับสกุลเงินให้รองรับ USD (สหรัฐอเมริกา) ตามที่แจ้ง
+  const currencySymbol = userData.currency_code === 'USD' ? '$' : '฿';
+
+  const lastSpokenTxId = useRef(null);
+
+  const speakTransactionAlert = (type, amount) => {
+    if ('speechSynthesis' in window) {
+      let textToSpeak = '';
+      const safeAmount = new Intl.NumberFormat('th-TH').format(Math.abs(amount)); 
+      
+      if (type === 'Deposit' || type === 'Topup' || type === 'Receive' || type === 'COMMISSION_5') {
+        textToSpeak = `ติ๊งหน่อง! มียอดเงินเข้า ${safeAmount} ${userData.currency_code || 'บาท'} ค่ะ`;
+      } else if (type === 'Withdraw' || type === 'Transfer') {
+        textToSpeak = `ติ๊งหน่อง! มียอดถอนเงิน ${safeAmount} ${userData.currency_code || 'บาท'} ค่ะ`;
+      } else {
+        textToSpeak = `ติ๊งหน่อง! มีรายการใหม่ ${safeAmount} ${userData.currency_code || 'บาท'} ค่ะ`;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = 'th-TH';
+      utterance.rate = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  useEffect(() => {
+    if (transactions && transactions.length > 0) {
+      const latestTx = transactions[0]; 
+      const currentTxId = latestTx.transaction_id || latestTx.id;
+
+      if (lastSpokenTxId.current !== currentTxId) {
+        if (lastSpokenTxId.current !== null) {
+          speakTransactionAlert(latestTx.transaction_type || latestTx.type, latestTx.amount);
+        }
+        lastSpokenTxId.current = currentTxId;
+      }
+    }
+  }, [transactions]); 
+
+  const fetchDashboardData = async (userId) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/dashboard/${userId}?t=${new Date().getTime()}`);
+      if (response.ok) {
+        const data = await response.json();
+        setWallet(data.wallet || { balance: 0, points: 0 });
+        setTransactions(data.recentTransactions || []);
+      }
+    } catch (error) {
+      console.error("Error fetching dashboard:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('userData');
+    let userId = null;
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUserData(parsedUser);
+      userId = parsedUser.id || parsedUser.user_id; 
+    }
+    if (userId) fetchDashboardData(userId);
+    else setIsLoading(false);
+  }, []);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(amount);
+  };
+
+  // ==========================================
+  // 🌟 Mockup Data สำหรับ UI ใหม่
+  // ==========================================
+  const mainCategories = [
+    { title: 'ที่พักทั้งหมด', icon: <Building2 size={40} color="#e11d48" />, bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', action: 'hotels' },
+    { title: 'เที่ยวบิน', icon: <Plane size={40} color="#7c3aed" />, bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', action: 'flights' },
+    { title: 'กิจกรรม', icon: <Tent size={40} color="#ea580c" />, bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', action: 'activities' },
+    { title: 'ที่พักส่วนตัว', icon: <Home size={40} color="#16a34a" />, bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', action: 'private_homes' },
+  ];
+
+  const subServices = [
+    { title: 'บริการรับส่ง\nสนามบิน', icon: <CarFront size={24} color="#0284c7" /> },
+    { title: 'บริการเช่ารถ', icon: <Car size={24} color="#0284c7" /> },
+    { title: 'eSIM', icon: <Wifi size={24} color="#0284c7" /> },
+    { title: 'รถไฟ', icon: <TrainFront size={24} color="#0284c7" /> },
+    { title: 'รถบัส', icon: <BusFront size={24} color="#0284c7" /> },
+  ];
+
+  const welcomeGifts = [
+    { title: 'รับส่วนลดสูงสุด 12%', subtitle: 'จองที่พักครั้งแรก', badge: 'รับสิทธิ์', icon: <Gift color="#ca8a04" /> },
+    { title: 'ทดลองเป็นลูกค้า VIP', subtitle: 'รับส่วนลดสูงสุด 15%', badge: 'ใหม่', icon: <Percent color="#000" /> },
+  ];
+
+  const flashSales = [
+    { title: 'อุ่นไอแคมป์ปิ้ง เขาค้อ รีสอร์ท', discount: 'ลด 76%', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500&q=80' },
+    { title: 'พูลวิลล่า ธรรมชาติ', discount: 'ลด 53%', img: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&q=80' },
+  ];
+
   return (
-    <div className="text-white p-4">
-      <h2 className="text-2xl font-bold">แดชบอร์ด (Dashboard)</h2>
-      <p>เนื้อหาหน้า Dashboard กำลังจะมา...</p>
+    <div className="app-container" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+      {/* 🌟 ซ่อน TopNavbar เดิมเพื่อใช้ Custom Header แนว Agoda */}
+      {/* <TopNavbar /> */}
+      
+      <div className="main-content" style={{ padding: '15px 20px 90px 20px', maxWidth: '500px', margin: '0 auto' }}>
+        
+        {/* ================= Header Section ================= */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* โลโก้จำลอง */}
+            <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 'bold', color: '#333' }}>
+              kinnon<span style={{color: '#e11d48'}}>.</span>
+            </h1>
+            {/* Badge ระดับผู้ใช้งาน */}
+            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1e293b', color: '#fbbf24', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold' }}>
+              ★ VIP <span style={{ color: '#fff', marginLeft: '4px' }}>{userData.level_name || 'Bronze'}</span>
+            </div>
+          </div>
+
+          {/* กระเป๋าเงิน / ยอดเงิน */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: '#dcfce7', padding: '6px 12px', borderRadius: '20px', color: '#166534', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <Ticket size={16} color="#16a34a" /> 
+            <span>{currencySymbol} {isLoading ? '...' : formatCurrency(wallet.balance)}</span>
+          </div>
+        </div>
+
+        {/* ================= 4 หมวดหมู่หลัก (Grid) ================= */}
+        <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '25px' }}>
+          {mainCategories.map((cat, idx) => (
+            <div key={idx} style={{ 
+              background: cat.bg, borderRadius: '16px', padding: '15px', 
+              position: 'relative', height: '95px', cursor: 'pointer',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
+            }}>
+              <h4 style={{ margin: 0, color: '#333', fontSize: '14px', fontWeight: 'bold', position: 'relative', zIndex: 2 }}>
+                {cat.title}
+              </h4>
+              <div style={{ position: 'absolute', bottom: '10px', right: '10px', opacity: 0.8, zIndex: 1 }}>
+                {cat.icon}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ================= เมนูบริการย่อย (Scroll แนวนอน) ================= */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', overflowX: 'auto', paddingBottom: '15px', marginBottom: '15px', gap: '10px', scrollbarWidth: 'none' }}>
+          {subServices.map((sub, idx) => (
+            <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '65px', cursor: 'pointer' }}>
+              <div style={{ padding: '10px', backgroundColor: '#f0f9ff', borderRadius: '12px', marginBottom: '8px' }}>
+                {sub.icon}
+              </div>
+              <span style={{ fontSize: '10px', color: '#475569', textAlign: 'center', whiteSpace: 'pre-line', lineHeight: '1.2' }}>
+                {sub.title}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <hr style={{ border: 'none', borderTop: '1px solid #e2e8f0', margin: '0 0 20px 0' }} />
+
+        {/* ================= ของขวัญต้อนรับลูกค้าใหม่ ================= */}
+        <div style={{ marginBottom: '25px' }}>
+          <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: '#1e293b', fontWeight: 'bold' }}>ของขวัญต้อนรับลูกค้าใหม่ ^^</h3>
+          <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '10px', scrollbarWidth: 'none' }}>
+            {welcomeGifts.map((gift, idx) => (
+              <div key={idx} style={{ 
+                minWidth: '220px', border: '1px solid #e2e8f0', borderRadius: '12px', 
+                padding: '12px', display: 'flex', alignItems: 'center', gap: '12px',
+                backgroundColor: '#fff', position: 'relative'
+              }}>
+                <div style={{ padding: '8px', backgroundColor: '#fef9c3', borderRadius: '8px' }}>
+                  {gift.icon}
+                </div>
+                <div>
+                  <p style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#333' }}>{gift.title}</p>
+                  <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: '#64748b' }}>{gift.subtitle}</p>
+                </div>
+                <div style={{ position: 'absolute', top: '12px', right: '12px', color: '#2563eb', fontSize: '11px', fontWeight: 'bold' }}>
+                  {gift.badge}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ================= ลดราคาเวลาจำกัด ================= */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+            <h3 style={{ margin: 0, fontSize: '16px', color: '#1e293b', fontWeight: 'bold' }}>
+              ลดราคาเวลาจำกัด - ที่พักใน<br/>เขาค้อ
+            </h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#e11d48', fontSize: '12px', fontWeight: 'bold' }}>
+              <Clock size={14} /> หมดอายุ 11:11:57
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '10px', scrollbarWidth: 'none' }}>
+            {flashSales.map((sale, idx) => (
+              <div key={idx} style={{ minWidth: '160px', borderRadius: '12px', overflow: 'hidden', position: 'relative', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                <img src={sale.img} alt={sale.title} style={{ width: '100%', height: '140px', objectFit: 'cover', display: 'block' }} />
+                <div style={{ position: 'absolute', top: '10px', left: '0', backgroundColor: '#e11d48', color: '#fff', padding: '4px 10px', fontSize: '12px', fontWeight: 'bold', borderTopRightRadius: '4px', borderBottomRightRadius: '4px' }}>
+                  {sale.discount}
+                </div>
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 10px 10px 10px', background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}>
+                   <p style={{ margin: 0, color: '#fff', fontSize: '12px', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                     {sale.title}
+                   </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+      
+      {/* ยังคงใช้ BottomNavbar ตัวเดิมของคุณ */}
+      <BottomNavbar />
     </div>
   );
-}
+};
 
-// ต้องมีบรรทัดนี้เพื่อแก้ปัญหา Error 'does not provide an export named default'
 export default Dashboard;
