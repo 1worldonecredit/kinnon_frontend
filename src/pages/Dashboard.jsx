@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavbar from '../components/BottomNavbar';
+import TopNavbar from '../components/TopNavbar';
 import { 
   Building2, Plane, Tent, Home, Car, CarFront, 
   Wifi, TrainFront, BusFront, Gift, Clock, 
