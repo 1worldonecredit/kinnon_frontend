@@ -83,6 +83,8 @@ const Dashboard = () => {
 
   return (
     <div className="app-container" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+
+      <TopNavbar />
       
       <div className="main-content" style={{ padding: '15px 20px 90px 20px', maxWidth: '500px', margin: '0 auto' }}>
         
