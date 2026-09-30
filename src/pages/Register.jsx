@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Eye, EyeOff, AlertCircle, Globe, UserPlus, User, Lock } from 'lucide-react'; 
-//import TopNavbar from '../components/TopNavbar';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
 
 const Register = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   
   const [searchParams] = useSearchParams();
@@ -17,9 +16,10 @@ const Register = () => {
     username: '', 
     password: '', 
     referrer: refParam || '', 
-    country: 'Thailand' 
+    country_id: '' // เปลี่ยนจาก country เป็น country_id เพื่อเก็บ ID ของประเทศ
   });
   
+  const [countries, setCountries] = useState([]); // State สำหรับเก็บรายชื่อประเทศ
   const [userStatus, setUserStatus] = useState(''); 
   const [referrerName, setReferrerName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +29,24 @@ const Register = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showIOSGuide, setShowIOSGuide] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+
+  // ดึงข้อมูลรายชื่อประเทศจาก API เมื่อโหลดหน้า
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/countries`);
+        const data = await response.json();
+        if (data.success && data.countries.length > 0) {
+          setCountries(data.countries);
+          // ตั้งค่าประเทศเริ่มต้นเป็น ID ของประเทศแรกในรายการ
+          setFormData(prev => ({ ...prev, country_id: data.countries[0].id }));
+        }
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
+    };
+    fetchCountries();
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
@@ -135,8 +153,6 @@ const Register = () => {
 
 return (
     <div className="cyber-hex-bg">
-      {/* <TopNavbar /> */}
-      
       <div className="main-content" style={{ maxWidth: '450px', margin: '0 auto', padding: '20px' }}>
 
         {!isStandalone && (
@@ -168,7 +184,7 @@ return (
           
           <form className="auth-form" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             
-            {/* เลือกประเทศ */}
+            {/* เลือกประเทศจาก Database */}
             <div style={{ textAlign: 'left' }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', fontSize: '12px', color: '#ffffff' }}>
                 <Globe size={16} color="#00e5ff" />
@@ -176,11 +192,17 @@ return (
               </label>
               <select 
                 className="cyber-input"
-                value={formData.country}
-                onChange={(e) => setFormData({...formData, country: e.target.value})}
+                value={formData.country_id}
+                onChange={(e) => setFormData({...formData, country_id: e.target.value})}
               >
-                <option style={{backgroundColor: '#051017', color: '#fff'}} value="Thailand">🇹🇭 {t('countryTH', 'ประเทศไทย (THB)')}</option>
-                <option style={{backgroundColor: '#051017', color: '#fff'}} value="Laos">🇱🇦 {t('countryLA', 'ສປປ ລາວ (LAK)')}</option>
+                {countries.map((country) => (
+                  <option key={country.id} style={{backgroundColor: '#051017', color: '#fff'}} value={country.id}>
+                    {/* ใช้ flag_image_url ถ้ามี หรือใช้ Emoji ถ้าไม่มี */}
+                    {country.iso_code === 'TH' ? '🇹🇭' : country.iso_code === 'LA' ? '🇱🇦' : '🏳️'} 
+                    {' '} 
+                    {i18n.language === 'en' ? country.name_en : country.name_th} ({country.currency_code})
+                  </option>
+                ))}
               </select>
             </div>
 
