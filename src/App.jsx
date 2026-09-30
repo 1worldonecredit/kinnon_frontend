@@ -2,7 +2,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-
+// นำเข้าไฟล์ใหม่
+import HotelSearch from './pages/HotelSearch';
+import HotelMap from './pages/HotelMap';
 
 function App() {
   return (
@@ -15,6 +17,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/hotels" element={<HotelSearch />} />
+            <Route path="/hotel-map" element={<HotelMap />} />
+
           </Routes>
         </div>
       </div>
