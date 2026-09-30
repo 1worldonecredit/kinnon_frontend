@@ -213,8 +213,8 @@ return (
               >
                 {countries.map((country) => (
                   <option key={country.id} style={{backgroundColor: '#051017', color: '#fff'}} value={country.id}>
-                    {/* ใช้ flag_image_url ถ้ามี หรือใช้ Emoji ถ้าไม่มี */}
-                    {country.iso_code === 'TH' ? '🇹🇭' : country.iso_code === 'LA' ? '🇱🇦' : '🏳️'} 
+                    {/* เปลี่ยนเงื่อนไขจาก LA เป็น US สำหรับรูปธงชาติอเมริกา */}
+                    {country.iso_code === 'TH' ? '🇹🇭' : country.iso_code === 'US' ? '🇺🇸' : '🏳️'} 
                     {' '} 
                     {i18n.language === 'en' ? country.name_en : country.name_th} ({country.currency_code})
                   </option>
