@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TopNavbar from '../components/TopNavbar';
 import BottomNavbar from '../components/BottomNavbar';
 import { 
   Building2, Plane, Tent, Home, Car, CarFront, 
   Wifi, TrainFront, BusFront, Gift, Clock, 
-  ChevronRight, Ticket, Percent, Flame
+  Ticket, Percent 
 } from 'lucide-react'; 
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
@@ -15,49 +14,42 @@ const Dashboard = () => {
   
   const [userData, setUserData] = useState({});
   const [wallet, setWallet] = useState({ balance: 0, points: 0 });
-  const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [rejectedCount, setRejectedCount] = useState(0);
 
-  // 🌟 ปรับสกุลเงินให้รองรับ USD (สหรัฐอเมริกา) ตามที่แจ้ง
+  // กำหนดสกุลเงิน
   const currencySymbol = userData.currency_code === 'USD' ? '$' : '฿';
 
-  const lastSpokenTxId = useRef(null);
+  // ==========================================
+  // 🌟 ข้อมูล Mockup ถูกย้ายมาไว้ข้างในฟังก์ชันแล้ว (แก้ Error)
+  // ==========================================
+  const mainCategories = [
+    { title: 'ที่พักทั้งหมด', icon: <Building2 size={40} color="#e11d48" />, bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', action: 'hotels' },
+    { title: 'เที่ยวบิน', icon: <Plane size={40} color="#7c3aed" />, bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', action: 'flights' },
+    { title: 'กิจกรรม', icon: <Tent size={40} color="#ea580c" />, bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', action: 'activities' },
+    { title: 'ที่พักส่วนตัว', icon: <Home size={40} color="#16a34a" />, bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', action: 'private_homes' },
+  ];
 
-  const speakTransactionAlert = (type, amount) => {
-    if ('speechSynthesis' in window) {
-      let textToSpeak = '';
-      const safeAmount = new Intl.NumberFormat('th-TH').format(Math.abs(amount)); 
-      
-      if (type === 'Deposit' || type === 'Topup' || type === 'Receive' || type === 'COMMISSION_5') {
-        textToSpeak = `ติ๊งหน่อง! มียอดเงินเข้า ${safeAmount} ${userData.currency_code || 'บาท'} ค่ะ`;
-      } else if (type === 'Withdraw' || type === 'Transfer') {
-        textToSpeak = `ติ๊งหน่อง! มียอดถอนเงิน ${safeAmount} ${userData.currency_code || 'บาท'} ค่ะ`;
-      } else {
-        textToSpeak = `ติ๊งหน่อง! มีรายการใหม่ ${safeAmount} ${userData.currency_code || 'บาท'} ค่ะ`;
-      }
+  const subServices = [
+    { title: 'บริการรับส่ง\nสนามบิน', icon: <CarFront size={24} color="#0284c7" /> },
+    { title: 'บริการเช่ารถ', icon: <Car size={24} color="#0284c7" /> },
+    { title: 'eSIM', icon: <Wifi size={24} color="#0284c7" /> },
+    { title: 'รถไฟ', icon: <TrainFront size={24} color="#0284c7" /> },
+    { title: 'รถบัส', icon: <BusFront size={24} color="#0284c7" /> },
+  ];
 
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = 'th-TH';
-      utterance.rate = 1.0;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
+  const welcomeGifts = [
+    { title: 'รับส่วนลดสูงสุด 12%', subtitle: 'จองที่พักครั้งแรก', badge: 'รับสิทธิ์', icon: <Gift color="#ca8a04" /> },
+    { title: 'ทดลองเป็นลูกค้า VIP', subtitle: 'รับส่วนลดสูงสุด 15%', badge: 'ใหม่', icon: <Percent color="#000" /> },
+  ];
 
-  useEffect(() => {
-    if (transactions && transactions.length > 0) {
-      const latestTx = transactions[0]; 
-      const currentTxId = latestTx.transaction_id || latestTx.id;
+  const flashSales = [
+    { title: 'อุ่นไอแคมป์ปิ้ง เขาค้อ รีสอร์ท', discount: 'ลด 76%', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500&q=80' },
+    { title: 'พูลวิลล่า ธรรมชาติ', discount: 'ลด 53%', img: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&q=80' },
+  ];
 
-      if (lastSpokenTxId.current !== currentTxId) {
-        if (lastSpokenTxId.current !== null) {
-          speakTransactionAlert(latestTx.transaction_type || latestTx.type, latestTx.amount);
-        }
-        lastSpokenTxId.current = currentTxId;
-      }
-    }
-  }, [transactions]); 
-
+  // ==========================================
+  // ดึงข้อมูลผู้ใช้และกระเป๋าเงิน
+  // ==========================================
   const fetchDashboardData = async (userId) => {
     setIsLoading(true);
     try {
@@ -65,7 +57,6 @@ const Dashboard = () => {
       if (response.ok) {
         const data = await response.json();
         setWallet(data.wallet || { balance: 0, points: 0 });
-        setTransactions(data.recentTransactions || []);
       }
     } catch (error) {
       console.error("Error fetching dashboard:", error);
@@ -90,60 +81,8 @@ const Dashboard = () => {
     return new Intl.NumberFormat('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(amount);
   };
 
-  // ==========================================
-  // 🌟 Mockup Data สำหรับ UI ใหม่
-  // ==========================================
- {/* ================= 4 หมวดหมู่หลัก (Grid) ================= */}
-        <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '25px' }}>
-          {mainCategories.map((cat, idx) => (
-            <div 
-              key={idx} 
-              onClick={() => {
-                // เช็คว่าถ้ากดปุ่ม 'hotels' ให้ลิงก์ไปหน้า /hotels
-                if (cat.action === 'hotels') {
-                  navigate('/hotels');
-                } else {
-                  alert(`กำลังพัฒนาระบบ: ${cat.title}`);
-                }
-              }}
-              style={{ 
-                background: cat.bg, borderRadius: '16px', padding: '15px', 
-                position: 'relative', height: '95px', cursor: 'pointer',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
-              }}
-            >
-              <h4 style={{ margin: 0, color: '#333', fontSize: '14px', fontWeight: 'bold', position: 'relative', zIndex: 2 }}>
-                {cat.title}
-              </h4>
-              <div style={{ position: 'absolute', bottom: '10px', right: '10px', opacity: 0.8, zIndex: 1 }}>
-                {cat.icon}
-              </div>
-            </div>
-          ))}
-        </div>
-
-  const subServices = [
-    { title: 'บริการรับส่ง\nสนามบิน', icon: <CarFront size={24} color="#0284c7" /> },
-    { title: 'บริการเช่ารถ', icon: <Car size={24} color="#0284c7" /> },
-    { title: 'eSIM', icon: <Wifi size={24} color="#0284c7" /> },
-    { title: 'รถไฟ', icon: <TrainFront size={24} color="#0284c7" /> },
-    { title: 'รถบัส', icon: <BusFront size={24} color="#0284c7" /> },
-  ];
-
-  const welcomeGifts = [
-    { title: 'รับส่วนลดสูงสุด 12%', subtitle: 'จองที่พักครั้งแรก', badge: 'รับสิทธิ์', icon: <Gift color="#ca8a04" /> },
-    { title: 'ทดลองเป็นลูกค้า VIP', subtitle: 'รับส่วนลดสูงสุด 15%', badge: 'ใหม่', icon: <Percent color="#000" /> },
-  ];
-
-  const flashSales = [
-    { title: 'อุ่นไอแคมป์ปิ้ง เขาค้อ รีสอร์ท', discount: 'ลด 76%', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500&q=80' },
-    { title: 'พูลวิลล่า ธรรมชาติ', discount: 'ลด 53%', img: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&q=80' },
-  ];
-
   return (
     <div className="app-container" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      {/* 🌟 ซ่อน TopNavbar เดิมเพื่อใช้ Custom Header แนว Agoda */}
-      {/* <TopNavbar /> */}
       
       <div className="main-content" style={{ padding: '15px 20px 90px 20px', maxWidth: '500px', margin: '0 auto' }}>
         
@@ -170,11 +109,22 @@ const Dashboard = () => {
         {/* ================= 4 หมวดหมู่หลัก (Grid) ================= */}
         <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '25px' }}>
           {mainCategories.map((cat, idx) => (
-            <div key={idx} style={{ 
-              background: cat.bg, borderRadius: '16px', padding: '15px', 
-              position: 'relative', height: '95px', cursor: 'pointer',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
-            }}>
+            <div 
+              key={idx} 
+              onClick={() => {
+                // 🌟 ลิงก์ไปหน้าโรงแรมตรงนี้
+                if (cat.action === 'hotels') {
+                  navigate('/hotels');
+                } else {
+                  alert(`กำลังพัฒนาระบบ: ${cat.title}`);
+                }
+              }}
+              style={{ 
+                background: cat.bg, borderRadius: '16px', padding: '15px', 
+                position: 'relative', height: '95px', cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
+              }}
+            >
               <h4 style={{ margin: 0, color: '#333', fontSize: '14px', fontWeight: 'bold', position: 'relative', zIndex: 2 }}>
                 {cat.title}
               </h4>
@@ -256,7 +206,6 @@ const Dashboard = () => {
 
       </div>
       
-      {/* ยังคงใช้ BottomNavbar ตัวเดิมของคุณ */}
       <BottomNavbar />
     </div>
   );
