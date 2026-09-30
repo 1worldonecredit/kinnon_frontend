@@ -93,12 +93,34 @@ const Dashboard = () => {
   // ==========================================
   // 🌟 Mockup Data สำหรับ UI ใหม่
   // ==========================================
-  const mainCategories = [
-    { title: 'ที่พักทั้งหมด', icon: <Building2 size={40} color="#e11d48" />, bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', action: 'hotels' },
-    { title: 'เที่ยวบิน', icon: <Plane size={40} color="#7c3aed" />, bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', action: 'flights' },
-    { title: 'กิจกรรม', icon: <Tent size={40} color="#ea580c" />, bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', action: 'activities' },
-    { title: 'ที่พักส่วนตัว', icon: <Home size={40} color="#16a34a" />, bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', action: 'private_homes' },
-  ];
+ {/* ================= 4 หมวดหมู่หลัก (Grid) ================= */}
+        <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '25px' }}>
+          {mainCategories.map((cat, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => {
+                // เช็คว่าถ้ากดปุ่ม 'hotels' ให้ลิงก์ไปหน้า /hotels
+                if (cat.action === 'hotels') {
+                  navigate('/hotels');
+                } else {
+                  alert(`กำลังพัฒนาระบบ: ${cat.title}`);
+                }
+              }}
+              style={{ 
+                background: cat.bg, borderRadius: '16px', padding: '15px', 
+                position: 'relative', height: '95px', cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
+              }}
+            >
+              <h4 style={{ margin: 0, color: '#333', fontSize: '14px', fontWeight: 'bold', position: 'relative', zIndex: 2 }}>
+                {cat.title}
+              </h4>
+              <div style={{ position: 'absolute', bottom: '10px', right: '10px', opacity: 0.8, zIndex: 1 }}>
+                {cat.icon}
+              </div>
+            </div>
+          ))}
+        </div>
 
   const subServices = [
     { title: 'บริการรับส่ง\nสนามบิน', icon: <CarFront size={24} color="#0284c7" /> },
