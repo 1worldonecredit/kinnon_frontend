@@ -83,6 +83,22 @@ const Register = () => {
     setFormData({ ...formData, [field]: filteredValue });
   };
 
+
+  // ฟังก์ชันสำหรับช่อง Password (อนุญาต a-z, 0-9 และสัญลักษณ์พิเศษ)
+  const handlePasswordChange = (e) => {
+    const originalValue = e.target.value;
+    // อนุญาตตัวอักษรภาษาอังกฤษ ตัวเลข และสัญลักษณ์ที่พบบ่อยบนคีย์บอร์ด
+    const filteredValue = originalValue.replace(/[^a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g, ''); 
+
+    if (originalValue !== filteredValue) {
+      setLangWarning({ ...langWarning, password: true });
+      setTimeout(() => {
+        setLangWarning((prev) => ({ ...prev, password: false }));
+      }, 3000);
+    }
+    setFormData({ ...formData, password: filteredValue });
+  };
+
   useEffect(() => {
     if (formData.username.length > 2) {
       setUserStatus('checking');
@@ -267,7 +283,7 @@ return (
             {/* รหัสผ่าน */}
             <div style={{ textAlign: 'left' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontSize: '12px', color: '#ffffff' }}>
-                รหัสผ่าน
+                รหัสผ่าน (ใช้สัญลักษณ์พิเศษได้)
               </label>
               <div style={{ position: 'relative' }}>
                 <Lock size={16} color="#00e5ff" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
@@ -275,9 +291,9 @@ return (
                   className="cyber-input" 
                   style={{ paddingLeft: '38px', paddingRight: '45px' }} 
                   type={showPassword ? "text" : "password"} 
-                  placeholder={t('password', 'รหัสผ่าน')} 
+                  placeholder={t('password', 'รหัสผ่าน 6 หลักขึ้นไป')} 
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={handlePasswordChange} /* เปลี่ยนมาใช้ฟังก์ชันใหม่ที่นี่ */
                   maxLength={50}
                 />
                 <button 
@@ -291,6 +307,12 @@ return (
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+              {/* เพิ่มข้อความเตือนหากพิมพ์ภาษาไทยในช่องรหัสผ่าน */}
+              {langWarning.password && (
+                <div className="status-text text-red" style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '5px', color: '#f87171', fontSize: '12px' }}>
+                  <AlertCircle size={14} /> กรุณาใช้ภาษาอังกฤษ ตัวเลข หรือสัญลักษณ์
+                </div>
+              )}
             </div>
 
             {/* ปุ่มยืนยัน */}
