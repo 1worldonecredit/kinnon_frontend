@@ -5,7 +5,7 @@ import { Wallet as WalletIcon } from 'lucide-react';
 
 const Wallet = () => {
   return (
-    <div className="app-container" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="app-container" style={{  minHeight: '100vh' }}>
       <TopNavbar />
       
       <div className="main-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
