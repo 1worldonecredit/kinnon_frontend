@@ -4,6 +4,8 @@ import {
   ChevronLeft, Search, Calendar, User, 
   MapPin, Map as MapIcon
 } from 'lucide-react';
+import TopNavbar from '../components/TopNavbar';
+import BottomNavbar from '../components/BottomNavbar';
 
 const HotelSearch = () => {
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ const HotelSearch = () => {
 
   return (
     <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', position: 'relative' }}>
-      
+      <TopNavbar />
       {/* Background สีชมพูไล่ระดับด้านบน */}
       <div style={{ 
         background: 'linear-gradient(180deg, #ffc0cb 0%, #f8fafc 100%)', 
@@ -136,6 +138,7 @@ const HotelSearch = () => {
         </div>
 
       </div>
+      <BottomNavbar />
     </div>
   );
 };

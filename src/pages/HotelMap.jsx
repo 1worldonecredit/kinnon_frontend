@@ -4,6 +4,8 @@ import {
   ChevronLeft, Search, Filter, SlidersHorizontal, 
   ArrowDownUp, ShoppingCart, Info, Star
 } from 'lucide-react';
+import TopNavbar from '../components/TopNavbar';
+import BottomNavbar from '../components/BottomNavbar';
 
 const HotelMap = () => {
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ const HotelMap = () => {
 
   return (
     <div style={{ height: '100vh', width: '100%', position: 'relative', overflow: 'hidden', backgroundColor: '#e2e8f0' }}>
-      
+      <TopNavbar />
       {/* ================= แผนที่จำลอง (Background) ================= */}
       <div style={{ 
         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, 
@@ -152,7 +154,7 @@ const HotelMap = () => {
           </div>
         </div>
       )}
-
+    <BottomNavbar />
     </div>
   );
 };
