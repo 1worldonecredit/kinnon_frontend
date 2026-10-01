@@ -1,7 +1,25 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
+
 export default defineConfig({
-  plugins: [react()],
-})
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate', // 🌟 ทำให้แอปอัปเดตเวอร์ชันใหม่เบื้องหลังอัตโนมัติ
+      manifest: {
+        name: 'KIN NON',
+        short_name: 'kin non',
+        description: 'ระบบจองห้องพีกและ สั่งอาหาร',
+        theme_color: '#dc2626', // 🌟 สีขอบด้านบนของแอปบนมือถือ (ใช้สีแดง)
+        background_color: '#ffffff',
+        display: 'standalone', // 🌟 บังคับให้แสดงเต็มจอ ไม่มีแท็บ URL ของเบราว์เซอร์
+        icons: [
+          { src: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icon-512x512.png', sizes: '512x512', type: 'image/png' }
+        ]
+      }
+    })
+  ]
+});
