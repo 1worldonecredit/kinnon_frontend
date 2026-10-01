@@ -10,6 +10,9 @@ import BottomNavbar from '../components/BottomNavbar';
 const HotelSearch = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overnight');
+  
+  // 🌟 1. เพิ่ม State สำหรับเก็บค่าที่ผู้ใช้พิมพ์ค้นหา
+  const [searchQuery, setSearchQuery] = useState('Khao Kho');
 
   return (
     <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', position: 'relative' }}>
@@ -65,10 +68,12 @@ const HotelSearch = () => {
             {/* สถานที่ */}
             <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#f1f5f9', padding: '15px', borderRadius: '12px', marginBottom: '15px' }}>
               <Search size={20} color="#64748b" style={{ marginRight: '10px' }} />
+              {/* 🌟 2. ผูก State searchQuery เข้ากับช่อง input ให้พิมพ์แก้ได้จริง */}
               <input 
                 type="text" 
                 placeholder="ค้นหาสถานที่..." 
-                defaultValue="Khao Kho"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 style={{ border: 'none', background: 'transparent', flex: 1, fontSize: '16px', outline: 'none', fontWeight: '500' }}
               />
               <MapPin size={20} color="#000" />
@@ -101,8 +106,9 @@ const HotelSearch = () => {
 
             {/* ปุ่มค้นหาและปุ่มดูแผนที่ */}
             <div style={{ display: 'flex', gap: '10px' }}>
+              {/* 🌟 3. แนบคำค้นหาไปกับ URL เมื่อผู้ใช้กดปุ่มแผนที่ */}
               <button 
-                onClick={() => navigate('/hotel-map')}
+                onClick={() => navigate(`/hotel-map?search=${encodeURIComponent(searchQuery)}`)}
                 style={{ width: '50px', height: '50px', borderRadius: '12px', border: '1px solid #cbd5e1', backgroundColor: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
               >
                 <MapIcon size={24} color="#2563eb" />
@@ -122,7 +128,6 @@ const HotelSearch = () => {
              <p style={{ margin: 0, fontSize: '10px', fontWeight: 'bold' }}>UP TO</p>
              <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold' }}>27<span style={{ fontSize: '12px' }}>%</span></h2>
              <p style={{ margin: 0, fontSize: '10px' }}>OFF</p>
-             {/* รอยหยักของคูปอง (ทำหลอก) */}
              <div style={{ position: 'absolute', right: '-5px', top: '50%', transform: 'translateY(-50%)', width: '10px', height: '10px', backgroundColor: '#fff', borderRadius: '50%' }}></div>
           </div>
           
