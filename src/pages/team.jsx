@@ -143,13 +143,13 @@ const Team = () => {
 
   const handleShareLink = async () => {
     if (!myUsername) return;
-    const link = `https://salapi.company/register?ref=${myUsername}`;
+    const link = `https://kinnon.live/register?ref=${myUsername}`;
     
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'SALAPI',
-          text: 'สมัคร SALAPI ผ่านลิงก์ของฉันเพื่อสร้างรายได้ไปด้วยกัน!',
+          title: 'KINNON',
+          text: 'ระบบจองห้องพัก และจองร้านอาหาร ที่ให้คุณสร้างรายได้ทุกวัน แค่คุณแชร์ หรือไลฟ์มีคนจองหรือใช้บริการคุณมีรายได้ทุกคำสั่งซื้อ!',
           url: link
         });
       } catch (err) {
