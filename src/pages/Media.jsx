@@ -134,7 +134,7 @@ const AdPlayer = ({ ad, isMain, onSelect, isSlowNet, userData }) => {
   if (isMain) {
       return (
           <div className={isFullScreen ? "fullscreen-mode" : "main-video-container"} onClick={handleVideoClick}>
-              
+              <TopNavbar />
               <div style={{ position: 'absolute', top: '15px', left: '15px', backgroundColor: 'rgba(239,68,68,0.9)', padding: '6px 12px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '6px', zIndex: 10 }}>
                 <PlayCircle size={14} color="white" /> <span style={{ color: 'white', fontSize: '11px', fontWeight: 'bold' }}>{formatNumber(viewsCount)} วิว</span>
               </div>
