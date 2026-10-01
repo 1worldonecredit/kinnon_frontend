@@ -3,7 +3,8 @@ import TopNavbar from '../components/TopNavbar';
 import BottomNavbar from '../components/BottomNavbar';
 import { Users, Calendar, ShoppingBag, Trophy, ChevronRight, UserPlus, Wallet, Clock } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.salapi.company';
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
 
 const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
