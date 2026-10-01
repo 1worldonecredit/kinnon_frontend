@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// 🌟 1. เพิ่ม useSearchParams สำหรับอ่านค่าจาก URL
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   ChevronLeft, Search, Filter, ArrowDownUp, 
   ShoppingCart, Info, Star, MapPin
@@ -9,18 +10,19 @@ import BottomNavbar from '../components/BottomNavbar';
 
 const HotelMap = () => {
   const navigate = useNavigate();
+  // 🌟 2. เรียกใช้งาน searchParams เพื่อดึงคำค้นหา
+  const [searchParams] = useSearchParams();
+  const searchLocation = searchParams.get('search') || 'ที่พักใกล้ฉัน';
+
   const [showCard, setShowCard] = useState(true);
   
-  // 🌟 1. State สำหรับพิกัดและรัศมี
   const [userLoc, setUserLoc] = useState({ lat: 13.7563, lng: 100.5018 }); // ค่าเริ่มต้น (กรุงเทพฯ)
   const [isLoadingLoc, setIsLoadingLoc] = useState(true);
   
-  // 🌟 2. ตัวแปรรัศมี (เตรียมไว้ให้ Admin เปลี่ยนค่าได้ในอนาคต)
   const [radiusKm, setRadiusKm] = useState(50); // ตั้งค่าเริ่มต้นที่ 50 กิโลเมตร
   const [zoom, setZoom] = useState(10); // ซูมระดับ 10 จะครอบคลุมพื้นที่ประมาณ 50 กม.
 
-  // 🌟 3. API Key จากภาพของคุณ
-const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   // ดึงตำแหน่งของผู้ใช้งานเมื่อเปิดหน้านี้
   useEffect(() => {
@@ -35,13 +37,14 @@ const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
         },
         (error) => {
           console.error("Error getting location:", error);
-          alert("ไม่สามารถดึงตำแหน่งได้ จะแสดงแผนที่เริ่มต้นแทน");
+          // เอา alert ออกชั่วคราวเพื่อไม่ให้กวนใจเวลาเทสในคอมพิวเตอร์
+          console.warn("ไม่สามารถดึงตำแหน่งได้ จะแสดงแผนที่เริ่มต้นแทน"); 
           setIsLoadingLoc(false);
         },
         { enableHighAccuracy: true, timeout: 10000 }
       );
     } else {
-      alert("บราวเซอร์ของคุณไม่รองรับการค้นหาตำแหน่ง");
+      console.warn("บราวเซอร์ของคุณไม่รองรับการค้นหาตำแหน่ง");
       setIsLoadingLoc(false);
     }
   }, []);
@@ -87,7 +90,8 @@ const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
             <div style={{ flex: 1, backgroundColor: '#f1f5f9', padding: '10px 15px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Search size={18} color="#64748b" />
               <div>
-                <p style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>ที่พักใกล้ฉัน (รัศมี {radiusKm} กม.)</p>
+                {/* 🌟 3. นำคำค้นหามาแสดงตรงนี้ ถ้าไม่ได้ค้นหาอะไรมา จะแสดงคำว่า "ที่พักใกล้ฉัน" */}
+                <p style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>{searchLocation} (รัศมี {radiusKm} กม.)</p>
                 <p style={{ margin: 0, fontSize: '11px', color: '#64748b' }}>อิงตามตำแหน่งปัจจุบันของคุณ</p>
               </div>
             </div>
