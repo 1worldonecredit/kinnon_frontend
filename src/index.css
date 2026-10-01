@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* วางโค้ด CSS ของคุณต่อจากบรรทัดนี้ได้เลย */
 /* =========================================
    1. Base & Variables (ลบ Layout ที่ซ้ำซ้อนออก)
 ========================================= */
@@ -87,7 +92,51 @@
   font-size: 13px;
   font-weight: 500;
 }
+.cyber-hex-bg {
+  /* เปลี่ยน URL เป็นที่อยู่รูปภาพพื้นหลังลวดลายหกเหลี่ยมของคุณในโฟลเดอร์ public */
+  background-image: url('/hex-background.jpg'); 
+  background-color: #14243a;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+}
 
+.cyber-input {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid #00e5ff !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  padding: 12px 15px;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+.cyber-input:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+
+.cyber-btn {
+  background-color: #00e5ff;
+  background: linear-gradient(90deg, #00b4d8 0%, #00e5ff 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  padding: 12px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4);
+  transition: transform 0.2s;
+}
+
+.cyber-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.6);
+}
 /* =========================================
    3. Bottom Navbar (ปรับสีให้เข้ากับธีมอวกาศ)
 ========================================= */
@@ -410,12 +459,13 @@
 /* กรอบหลัก: บังคับให้เรียงจากบนลงล่างอย่างเป็นระเบียบ */
 .app-container {
   display: flex !important;
-  flex-direction: column !important; /* ให้เรียง TopNav -> Content -> BottomNav */
+  flex-direction: column !important; /* เรียงจากบนลงล่าง */
   width: 100% !important;
   max-width: 1200px !important;
   margin: 0 auto !important;
-  min-height: 100vh !important;
+  min-height: 100vh !important; 
   background: transparent !important;
+  position: relative; /* ให้เป็นจุดอ้างอิงสำหรับ absolute ด้านใน (ถ้ามี) */
 }
 
 /* ล็อค Top Navbar ให้อยู่บนสุดเสมอ (แต่ยังอยู่ในกรอบ 1200px) */
@@ -437,9 +487,11 @@
 
 /* พื้นที่เนื้อหาหลัก (จะถูกดันให้อยู่ระหว่าง Top และ Bottom อัตโนมัติ) */
 .main-content {
-  flex: 1 !important; /* บังคับให้กินพื้นที่ว่างตรงกลางทั้งหมด */
-  overflow-y: auto !important;
-  width: 100% !important;
+  flex-grow: 1; /* สำคัญมาก! บังคับให้เนื้อหาขยายเต็มพื้นที่ที่เหลือ */
+  /* ใส่ Padding กันเนื้อหาซ่อนใต้ Navbar (ปรับตัวเลขตามความสูง Navbar จริง) */
+  padding-top: 70px !important; 
+  padding-bottom: 80px !important; 
+  width: 100%;
 }
 
 /* =========================================
@@ -486,3 +538,4 @@
     margin-bottom: 20px !important;
   }
 }
+
