@@ -21,7 +21,7 @@ const Dashboard = () => {
   const currencySymbol = userData.currency_code === 'USD' ? '$' : '฿';
 
   // ==========================================
-  // 🌟 ข้อมูล Mockup ถูกย้ายมาไว้ข้างในฟังก์ชันแล้ว (แก้ Error)
+  // 🌟 ข้อมูล Mockup ถูกย้ายมาไว้ข้างในฟังก์ชันแล้ว (แก้ Error)  utensils-crossed
   // ==========================================
   const mainCategories = [
     { title: 'ที่พักทั้งหมด', icon: <Building2 size={40} color="#e11d48" />, bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', action: 'hotels' },
