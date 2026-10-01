@@ -263,7 +263,7 @@ const Media = () => {
           const userObj = JSON.parse(storedUser);
           usernameQuery = `?username=${userObj.username}`;
       }
-      const res = await fetch(`${API_URL}/api/video-promotions${usernameQuery}`, { cache: 'no-store' });
+     // const res = await fetch(`${API_URL}/api/video-promotions${usernameQuery}`, { cache: 'no-store' });
       const data = await res.json();
       if (data.success && data.ads.length > 0) {
         setAdsList(data.ads);
@@ -281,13 +281,13 @@ const Media = () => {
     } catch (err) {}
   };
 
-  const fetchJobAdData = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/hrm/job-ad`);
-      const data = await res.json();
-      if (data.success && data.ad && data.ad.is_active) { setJobAd(data.ad); }
-    } catch (err) {}
-  };
+//   const fetchJobAdData = async () => {
+//     try {
+//       const res = await fetch(`${API_URL}/api/hrm/job-ad`);
+//       const data = await res.json();
+//       if (data.success && data.ad && data.ad.is_active) { setJobAd(data.ad); }
+//     } catch (err) {}
+//   };
 
   useEffect(() => {
     fetchAdsData(); fetchBoardData(); fetchJobAdData(); 
