@@ -263,7 +263,7 @@ const Media = () => {
           const userObj = JSON.parse(storedUser);
           usernameQuery = `?username=${userObj.username}`;
       }
-     // const res = await fetch(`${API_URL}/api/video-promotions${usernameQuery}`, { cache: 'no-store' });
+      const res = await fetch(`${API_URL}/api/video-promotions${usernameQuery}`, { cache: 'no-store' });
       const data = await res.json();
       if (data.success && data.ads.length > 0) {
         setAdsList(data.ads);
