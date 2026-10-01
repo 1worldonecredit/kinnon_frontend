@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClipboardList, PlaySquare, Users, Settings, LogOut, X, Bell, Camera, Save, XCircle, CheckCircle2, Profile} from 'lucide-react';
+import { ClipboardList, PlaySquare, Users, Settings, LogOut, X, Bell, Camera, Save, XCircle, CheckCircle2, User} from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
 
