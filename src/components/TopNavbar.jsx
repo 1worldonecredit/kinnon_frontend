@@ -16,30 +16,30 @@ const TopNavbar = () => {
   // State ควบคุม Sidebar
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('userData');
-    if (storedUser) {
-      setIsLoggedIn(true);
-      const user = JSON.parse(storedUser);
-      const uid = user.id || user.user_id;
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem('userData');
+  //   if (storedUser) {
+  //     setIsLoggedIn(true);
+  //     const user = JSON.parse(storedUser);
+  //     const uid = user.id || user.user_id;
 
-      // const fetchUnreadNotifications = async () => {
-      //   try {
-      //     const res = await fetch(`${API_URL}/api/notifications/${uid}`);
-      //     const data = await res.json();
-      //     if (data.success) {
-      //       setUnreadCount(data.unreadCount || 0);
-      //     }
-      //   } catch (error) {
-      //     console.error("Error fetching notifications count", error);
-      //   }
-      // };
+  //     const fetchUnreadNotifications = async () => {
+  //       try {
+  //         const res = await fetch(`${API_URL}/api/notifications/${uid}`);
+  //         const data = await res.json();
+  //         if (data.success) {
+  //           setUnreadCount(data.unreadCount || 0);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching notifications count", error);
+  //       }
+  //     };
 
-      fetchUnreadNotifications();
-      const interval = setInterval(fetchUnreadNotifications, 10000); // ดึงข้อมูลทุก 10 วิ
-      return () => clearInterval(interval);
-    }
-  }, []);
+  //     fetchUnreadNotifications();
+  //     const interval = setInterval(fetchUnreadNotifications, 10000); // ดึงข้อมูลทุก 10 วิ
+  //     return () => clearInterval(interval);
+  //   }
+  // }, []);
 
   const toggleLanguage = () => {
     const currentLang = i18n.language || 'lo';
