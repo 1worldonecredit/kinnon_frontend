@@ -185,9 +185,8 @@ const Sidebar = ({ isOpen, onClose }) => {
           style={{ flex: 1, overflowY: 'auto', padding: '0 10px', display: 'flex', flexDirection: 'column', gap: '5px', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           <style>{`.sidebar-menu-container::-webkit-scrollbar { display: none; }`}</style>
-
           <button onClick={() => { navigate('/profile'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
-            <Profile size={20} color="#00e5ff" /> โปรไฟล์ (Profile)
+            <User size={20} color="#00e5ff" /> โปรไฟล์ (Profile)
           </button>
 
           <button onClick={() => { navigate('/orders'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
