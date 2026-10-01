@@ -17,6 +17,8 @@ import Bookings from './pages/Bookings';
 import Jobs from './pages/Jobs';
 import Mechanics from './pages/Mechanics';
 import Taxis from './pages/Taxis';
+import PostVedio from './pages/PostVedio';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -43,6 +45,8 @@ function App() {
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/mechanics" element={<Mechanics />} />
             <Route path="/taxis" element={<Taxis />} />
+            <Route path="/post-vedio" element={<PostVedio />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </div>
