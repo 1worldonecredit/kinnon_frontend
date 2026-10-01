@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
-    <!-- 🌟 ตั้งค่า PWA / Web App แบบมาตรฐานใหม่ -->
+    <!-- 🌟 ตั้งค่า PWA สำหรับ Android (มาตรฐาน) -->
     <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- 🌟 ตั้งค่า PWA สำหรับ iOS (iPhone/iPad) บังคับต้องมี! -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="KIN NON">
+    
+    <!-- 🌟 โค้ดดึงไอคอนไปแสดงบนหน้าจอโฮมของ iOS (อ้างอิงจากชื่อไฟล์ในโฟลเดอร์ public ของคุณ) -->
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
 
     <title>KIN NON</title>
   </head>
