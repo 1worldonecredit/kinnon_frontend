@@ -20,7 +20,7 @@ const BottomNavbar = () => {
       </Link>
 
       {/* 🌟 เปลี่ยนจาก /prelogin เป็น / ให้ตรงกับที่ตั้งไว้ใน App.jsx */}
-      <Link to="/" className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}>
+      <Link to="/media" className={`nav-item ${location.pathname === '/media' ? 'active' : ''}`}>
         <PlaySquare size={22} />
         <span>วีดีโอ</span>
       </Link>
