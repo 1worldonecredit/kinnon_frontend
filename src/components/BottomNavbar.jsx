@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutGrid, Trophy, Users, MessageCircle, PlaySquare } from 'lucide-react'; // 🌟 เพิ่ม PlaySquare สำหรับวีดีโอ
+// 🌟 เปลี่ยนไอคอนนำเข้าใหม่ เอา Trophy กับ MessageCircle ออก แล้วใส่ Wallet กับ Store แทน
+import { LayoutGrid, Wallet, Users, Store, PlaySquare } from 'lucide-react'; 
 
 const BottomNavbar = () => {
   const location = useLocation();
@@ -12,12 +13,13 @@ const BottomNavbar = () => {
         <span>หน้าหลัก</span>
       </Link>
       
-      <Link to="/mission" className={`nav-item ${location.pathname === '/mission' ? 'active' : ''}`}>
-        <Trophy size={22} />
-        <span>ภารกิจ</span>
+      {/* 🌟 1. เปลี่ยนจาก ภารกิจ (/mission) เป็น กระเป๋าเงิน (/wallet) */}
+      <Link to="/wallet" className={`nav-item ${location.pathname === '/wallet' ? 'active' : ''}`}>
+        <Wallet size={22} />
+        <span>กระเป๋าเงิน</span>
       </Link>
 
-     {/* 🌟 เปลี่ยนจาก /prelogin เป็น / ให้ตรงกับที่ตั้งไว้ใน App.jsx */}
+      {/* 🌟 เปลี่ยนจาก /prelogin เป็น / ให้ตรงกับที่ตั้งไว้ใน App.jsx */}
       <Link to="/" className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}>
         <PlaySquare size={22} />
         <span>วีดีโอ</span>
@@ -28,9 +30,10 @@ const BottomNavbar = () => {
         <span>ทีม</span>
       </Link>
       
-      <Link to="/chat" className={`nav-item ${location.pathname === '/chat' ? 'active' : ''}`}>
-        <MessageCircle size={22} />
-        <span>แชท</span>
+      {/* 🌟 2. เปลี่ยนจาก แชท (/chat) เป็น ร้านค้า (/shop) */}
+      <Link to="/shop" className={`nav-item ${location.pathname === '/shop' ? 'active' : ''}`}>
+        <Store size={22} />
+        <span>ร้านค้า</span>
       </Link>
     </div>
   );

@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard';
 import HotelSearch from './pages/HotelSearch';
 import HotelMap from './pages/HotelMap';
 import Team from './pages/team';
+import Wallet from './pages/Wallet';
+import Shop from './pages/Shop';
 
 function App() {
   return (
@@ -21,7 +23,8 @@ function App() {
             <Route path="/hotels" element={<HotelSearch />} />
             <Route path="/hotel-map" element={<HotelMap />} />
             <Route path="/team" element={<Team />} />
-
+            <Route path="/wallet" element={<Wallet />} />
+            <Route path="/shop" element={<Shop />} />
           </Routes>
         </div>
       </div>
