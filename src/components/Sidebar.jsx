@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, MessageSquare, Users, Settings, LogOut, X, Bell, Camera, Save, XCircle, CheckCircle2 } from 'lucide-react';
+import { ClipboardList, PlaySquare, Users, Settings, LogOut, X, Bell, Camera, Save, XCircle, CheckCircle2 } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
 
@@ -186,16 +186,20 @@ const Sidebar = ({ isOpen, onClose }) => {
         >
           <style>{`.sidebar-menu-container::-webkit-scrollbar { display: none; }`}</style>
 
-          <button onClick={() => { navigate('/dashboard'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
-            <Home size={20} color="#00e5ff" /> หน้าหลัก (Home)
+          <button onClick={() => { navigate('/profile'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
+            <Profile size={20} color="#00e5ff" /> โปรไฟล์ (Profile)
           </button>
 
-          <button onClick={() => { navigate('/chat'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
-            <MessageSquare size={20} color="#00e5ff" /> ข้อความ (Messages)
+          <button onClick={() => { navigate('/orders'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
+            <ClipboardList size={20} color="#00e5ff" /> ออร์เดอร์ (Orders)
           </button>
 
           <button onClick={() => { navigate('/team'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
             <Users size={20} color="#00e5ff" /> ทีมงานของฉัน
+          </button>
+
+           <button onClick={() => { navigate('/post-vedio'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
+            <PlaySquare size={20} color="#00e5ff" /> โพ้ส วิดีโอ
           </button>
 
           <button style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 15px', backgroundColor: 'transparent', border: 'none', borderRadius: '12px', color: '#cbd5e1', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>
