@@ -6,8 +6,19 @@
 /* =========================================
    1. Base & Variables (ลบ Layout ที่ซ้ำซ้อนออก)
 ========================================= */
-* {
-  box-sizing: border-box;
+/* =========================================
+   Reset & Fix ขอบจอทะลุ
+========================================= */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden !important; /* ซ่อนแถบเลื่อนซ้าย-ขวา */
 }
 
 /* เก็บตัวแปรสีและขนาดของเดิมไว้ (ไม่กระทบ Master) */
