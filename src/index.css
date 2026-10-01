@@ -159,7 +159,7 @@ html, body {
   flex-shrink: 0; 
   
   /* 🌟 เปลี่ยนจากสีแดง เป็นกระจกใสโทนอวกาศ */
-  background: rgba(5, 16, 23, 0.95) !important; 
+  background: rgba(30, 30, 213, 0.95) !important; 
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   border-top: 1px solid rgba(0, 240, 255, 0.2) !important; /* เพิ่มเส้นขอบบนสีฟ้าไซอันบางๆ */
