@@ -459,12 +459,13 @@
 /* กรอบหลัก: บังคับให้เรียงจากบนลงล่างอย่างเป็นระเบียบ */
 .app-container {
   display: flex !important;
-  flex-direction: column !important; /* ให้เรียง TopNav -> Content -> BottomNav */
+  flex-direction: column !important; /* เรียงจากบนลงล่าง */
   width: 100% !important;
   max-width: 1200px !important;
   margin: 0 auto !important;
-  min-height: 100vh !important;
+  min-height: 100vh !important; 
   background: transparent !important;
+  position: relative; /* ให้เป็นจุดอ้างอิงสำหรับ absolute ด้านใน (ถ้ามี) */
 }
 
 /* ล็อค Top Navbar ให้อยู่บนสุดเสมอ (แต่ยังอยู่ในกรอบ 1200px) */
@@ -486,9 +487,11 @@
 
 /* พื้นที่เนื้อหาหลัก (จะถูกดันให้อยู่ระหว่าง Top และ Bottom อัตโนมัติ) */
 .main-content {
-  flex: 1 !important; /* บังคับให้กินพื้นที่ว่างตรงกลางทั้งหมด */
-  overflow-y: auto !important;
-  width: 100% !important;
+  flex-grow: 1; /* สำคัญมาก! บังคับให้เนื้อหาขยายเต็มพื้นที่ที่เหลือ */
+  /* ใส่ Padding กันเนื้อหาซ่อนใต้ Navbar (ปรับตัวเลขตามความสูง Navbar จริง) */
+  padding-top: 70px !important; 
+  padding-bottom: 80px !important; 
+  width: 100%;
 }
 
 /* =========================================

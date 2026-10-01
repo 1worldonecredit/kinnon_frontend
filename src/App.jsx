@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 // นำเข้าไฟล์ใหม่
 import HotelSearch from './pages/HotelSearch';
 import HotelMap from './pages/HotelMap';
+import Team from './pages/team';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/hotels" element={<HotelSearch />} />
             <Route path="/hotel-map" element={<HotelMap />} />
+            <Route path="/team" element={<Team />} />
 
           </Routes>
         </div>
