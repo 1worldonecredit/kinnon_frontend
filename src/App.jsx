@@ -11,6 +11,7 @@ import Shop from './pages/Shop';
 import Media from './pages/Media';
 import Restaurants from './pages/Restaurants';
 import NearbyHotels from './pages/NearbyHotels';
+import MonthlyRentals from './pages/MonthlyRentals';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
              <Route path="/media" element={<Media />} />
              <Route path="/restaurants" element={<Restaurants />} />
             <Route path="/nearby-hotels" element={<NearbyHotels />} />
+            <Route path="/monthly-rentals" element={<MonthlyRentals />} />
           </Routes>
         </div>
       </div>

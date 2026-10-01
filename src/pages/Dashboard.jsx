@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import BottomNavbar from '../components/BottomNavbar';
 import TopNavbar from '../components/TopNavbar';
 import { 
-  Building2, Plane, Tent, Home, Car, CarFront, 
-  Wifi, TrainFront, BusFront, Gift, Clock, 
-  Ticket, Percent, Utensils, MapPin 
+  Building2, Plane, Tent, Home,
+   Gift, Clock, 
+  Ticket, Percent, Utensils, MapPin ,ClipboardList, CalendarCheck, HardHat, Wrench, CarTaxiFront
 } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
@@ -27,15 +27,15 @@ const Dashboard = () => {
     { title: 'ที่พักทั้งหมด', icon: <Building2 size={40} color="#e11d48" />, bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', action: 'hotels' },
     { title: 'ร้านอาหารใกล้ฉัน', icon: <Utensils size={40} color="#7c3aed" />, bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', action: 'restaurants' },
     { title: 'ที่พักใกล้ฉัน', icon: <MapPin size={40} color="#ea580c" />, bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', action: 'nearby_hotels' },
-    { title: 'ที่พักส่วนตัว', icon: <Home size={40} color="#16a34a" />, bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', action: 'private_homes' },
+   { title: 'ห้องเช่ารายเดือน', icon: <Home size={40} color="#16a34a" />, bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', action: 'monthly_rentals' },
   ];
 
   const subServices = [
-    { title: 'บริการรับส่ง\nสนามบิน', icon: <CarFront size={24} color="#0284c7" /> },
-    { title: 'บริการเช่ารถ', icon: <Car size={24} color="#0284c7" /> },
-    { title: 'eSIM', icon: <Wifi size={24} color="#0284c7" /> },
-    { title: 'รถไฟ', icon: <TrainFront size={24} color="#0284c7" /> },
-    { title: 'รถบัส', icon: <BusFront size={24} color="#0284c7" /> },
+    { title: 'ออร์เดอร์', icon: <ClipboardList size={24} color="#0284c7" /> },
+    { title: 'การจอง', icon: <CalendarCheck size={24} color="#0284c7" /> },
+    { title: 'ต้องการคนทำงาน', icon: <HardHat size={24} color="#0284c7" /> },
+    { title: 'ช่างซ้อมรถใกล้ฉัน', icon: <Wrench size={24} color="#0284c7" /> },
+    { title: 'รถรับจ้าง', icon: <CarTaxiFront size={24} color="#0284c7" /> },
   ];
 
   const welcomeGifts = [
@@ -121,6 +121,8 @@ const Dashboard = () => {
                   navigate('/restaurants');
                 } else if (cat.action === 'nearby_hotels') {
                   navigate('/nearby-hotels');
+                } else if (cat.action === 'monthly_rentals') { // 🌟 เพิ่มเงื่อนไขนี้
+                  navigate('/monthly-rentals');
                 } else {
                   alert(`กำลังพัฒนาระบบ: ${cat.title}`);
                 }
