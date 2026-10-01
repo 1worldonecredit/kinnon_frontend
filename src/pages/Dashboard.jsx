@@ -31,13 +31,12 @@ const Dashboard = () => {
   ];
 
   const subServices = [
-    { title: 'ออร์เดอร์', icon: <ClipboardList size={24} color="#0284c7" /> },
-    { title: 'การจอง', icon: <CalendarCheck size={24} color="#0284c7" /> },
-    { title: 'ต้องการคนทำงาน', icon: <HardHat size={24} color="#0284c7" /> },
-    { title: 'ช่างซ้อมรถใกล้ฉัน', icon: <Wrench size={24} color="#0284c7" /> },
-    { title: 'รถรับจ้าง', icon: <CarTaxiFront size={24} color="#0284c7" /> },
+    { title: 'ออร์เดอร์', icon: <ClipboardList size={24} color="#0284c7" />, action: 'orders' },
+    { title: 'การจอง', icon: <CalendarCheck size={24} color="#0284c7" />, action: 'bookings' },
+    { title: 'ต้องการคนทำงาน', icon: <HardHat size={24} color="#0284c7" />, action: 'jobs' },
+    { title: 'ช่างซ่อมรถใกล้ฉัน', icon: <Wrench size={24} color="#0284c7" />, action: 'mechanics' },
+    { title: 'รถรับจ้าง', icon: <CarTaxiFront size={24} color="#0284c7" />, action: 'taxis' },
   ];
-
   const welcomeGifts = [
     { title: 'รับส่วนลดสูงสุด 12%', subtitle: 'จองที่พักครั้งแรก', badge: 'รับสิทธิ์', icon: <Gift color="#ca8a04" /> },
     { title: 'ทดลองเป็นลูกค้า VIP', subtitle: 'รับส่วนลดสูงสุด 15%', badge: 'ใหม่', icon: <Percent color="#000" /> },
@@ -144,9 +143,19 @@ const Dashboard = () => {
         </div>
 
         {/* ================= เมนูบริการย่อย (Scroll แนวนอน) ================= */}
+       {/* ================= เมนูบริการย่อย ================= */}
         <div style={{ display: 'flex', justifyContent: 'space-between', overflowX: 'auto', paddingBottom: '15px', marginBottom: '15px', gap: '10px', scrollbarWidth: 'none' }}>
           {subServices.map((sub, idx) => (
-            <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '65px', cursor: 'pointer' }}>
+            <div 
+              key={idx} 
+              // 🌟 เพิ่ม onClick ตรงนี้เพื่อให้กดลิงก์ได้
+              onClick={() => {
+                if (sub.action) {
+                  navigate(`/${sub.action}`);
+                }
+              }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '65px', cursor: 'pointer' }}
+            >
               <div style={{ padding: '10px', backgroundColor: '#f0f9ff', borderRadius: '12px', marginBottom: '8px' }}>
                 {sub.icon}
               </div>

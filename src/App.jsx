@@ -12,6 +12,11 @@ import Media from './pages/Media';
 import Restaurants from './pages/Restaurants';
 import NearbyHotels from './pages/NearbyHotels';
 import MonthlyRentals from './pages/MonthlyRentals';
+import Orders from './pages/Orders';
+import Bookings from './pages/Bookings';
+import Jobs from './pages/Jobs';
+import Mechanics from './pages/Mechanics';
+import Taxis from './pages/Taxis';
 
 function App() {
   return (
@@ -33,6 +38,11 @@ function App() {
              <Route path="/restaurants" element={<Restaurants />} />
             <Route path="/nearby-hotels" element={<NearbyHotels />} />
             <Route path="/monthly-rentals" element={<MonthlyRentals />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/mechanics" element={<Mechanics />} />
+            <Route path="/taxis" element={<Taxis />} />
           </Routes>
         </div>
       </div>
