@@ -9,10 +9,24 @@ const Wallet = () => {
       <TopNavbar />
       
       <div className="main-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-          <WalletIcon size={64} color="#3b82f6" style={{ marginBottom: '20px', margin: '0 auto' }} />
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', marginBottom: '10px' }}>กระเป๋าเงินของฉัน</h1>
-          <p style={{ color: '#64748b' }}>หน้านี้กำลังอยู่ระหว่างการพัฒนาระบบ...</p>
+             {/* ================= Header Section ================= */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* โลโก้จำลอง */}
+            <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 'bold', color: '#333' }}>
+              kinnon<span style={{color: '#e11d48'}}>.</span>
+            </h1>
+            {/* Badge ระดับผู้ใช้งาน */}
+            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1e293b', color: '#fbbf24', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold' }}>
+              ★ VIP <span style={{ color: '#fff', marginLeft: '4px' }}>{userData.level_name || 'Bronze'}</span>
+            </div>
+          </div>
+
+          {/* กระเป๋าเงิน / ยอดเงิน */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: '#dcfce7', padding: '6px 12px', borderRadius: '20px', color: '#166534', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <Ticket size={16} color="#16a34a" /> 
+            <span>{currencySymbol} {isLoading ? '...' : formatCurrency(wallet.balance)}</span>
+          </div>
         </div>
       </div>
 
