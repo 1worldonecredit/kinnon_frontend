@@ -20,7 +20,7 @@ const HotelMap = () => {
   const [zoom, setZoom] = useState(10); // ซูมระดับ 10 จะครอบคลุมพื้นที่ประมาณ 50 กม.
 
   // 🌟 3. API Key จากภาพของคุณ
-  const API_KEY = 'AIzaSyAPhAras3PCvKPZ0_rBRUcQ5TIgFopqPpo'; 
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   // ดึงตำแหน่งของผู้ใช้งานเมื่อเปิดหน้านี้
   useEffect(() => {
