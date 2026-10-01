@@ -5,8 +5,8 @@ import TopNavbar from '../components/TopNavbar';
 import { 
   Building2, Plane, Tent, Home, Car, CarFront, 
   Wifi, TrainFront, BusFront, Gift, Clock, 
-  Ticket, Percent 
-} from 'lucide-react'; 
+  Ticket, Percent, Utensils, MapPin 
+} from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://apibooking.smartsoft.agency';
 
@@ -20,13 +20,13 @@ const Dashboard = () => {
   // กำหนดสกุลเงิน
   const currencySymbol = userData.currency_code === 'USD' ? '$' : '฿';
 
-  // ==========================================
-  // 🌟 ข้อมูล Mockup ถูกย้ายมาไว้ข้างในฟังก์ชันแล้ว (แก้ Error)  utensils-crossed
+// ==========================================
+  // ข้อมูล 4 หมวดหมู่หลัก (อัปเดตใหม่)
   // ==========================================
   const mainCategories = [
     { title: 'ที่พักทั้งหมด', icon: <Building2 size={40} color="#e11d48" />, bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', action: 'hotels' },
-    { title: 'เที่ยวบิน', icon: <Plane size={40} color="#7c3aed" />, bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', action: 'flights' },
-    { title: 'กิจกรรม', icon: <Tent size={40} color="#ea580c" />, bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', action: 'activities' },
+    { title: 'ร้านอาหารใกล้ฉัน', icon: <Utensils size={40} color="#7c3aed" />, bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', action: 'restaurants' },
+    { title: 'ที่พักใกล้ฉัน', icon: <MapPin size={40} color="#ea580c" />, bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', action: 'nearby_hotels' },
     { title: 'ที่พักส่วนตัว', icon: <Home size={40} color="#16a34a" />, bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', action: 'private_homes' },
   ];
 
@@ -114,10 +114,13 @@ const Dashboard = () => {
           {mainCategories.map((cat, idx) => (
             <div 
               key={idx} 
-              onClick={() => {
-                // 🌟 ลิงก์ไปหน้าโรงแรมตรงนี้
+             onClick={() => {
                 if (cat.action === 'hotels') {
                   navigate('/hotels');
+                } else if (cat.action === 'restaurants') {
+                  navigate('/restaurants');
+                } else if (cat.action === 'nearby_hotels') {
+                  navigate('/nearby-hotels');
                 } else {
                   alert(`กำลังพัฒนาระบบ: ${cat.title}`);
                 }

@@ -9,6 +9,8 @@ import Team from './pages/team';
 import Wallet from './pages/Wallet';
 import Shop from './pages/Shop';
 import Media from './pages/Media';
+import Restaurants from './pages/Restaurants';
+import NearbyHotels from './pages/NearbyHotels';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/shop" element={<Shop />} />
              <Route path="/media" element={<Media />} />
+             <Route path="/restaurants" element={<Restaurants />} />
+            <Route path="/nearby-hotels" element={<NearbyHotels />} />
           </Routes>
         </div>
       </div>
