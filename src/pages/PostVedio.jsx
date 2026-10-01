@@ -1,7 +1,7 @@
 import React from 'react';
 import TopNavbar from '../components/TopNavbar';
 import BottomNavbar from '../components/BottomNavbar';
-import { PlaySquare } from 'lucide-react';
+
 
 const PostVedio = () => {
   return (
