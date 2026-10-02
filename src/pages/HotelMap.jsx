@@ -7,7 +7,9 @@ import {
 import TopNavbar from '../components/TopNavbar';
 import BottomNavbar from '../components/BottomNavbar';
 
-// 🌟 ฟังก์ชันคำนวณระยะทาง
+// 🌟 1. Import ไลบรารีของ Google Maps
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+
 const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
   const R = 6371; 
   const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -27,11 +29,14 @@ const HotelMap = () => {
 
   const [showCard, setShowCard] = useState(true);
   const [userLoc, setUserLoc] = useState({ lat: 13.7563, lng: 100.5018 }); 
-  const [isLoadingLoc, setIsLoadingLoc] = useState(true);
   const [radiusKm, setRadiusKm] = useState(null); 
   const [zoom, setZoom] = useState(10); 
 
-  const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  // 🌟 2. โหลดสคริปต์ Google Maps อย่างปลอดภัย
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  });
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -53,19 +58,16 @@ const HotelMap = () => {
           } catch (err) {
             setRadiusKm(50); 
           }
-          setIsLoadingLoc(false);
         },
         (error) => { 
           console.warn("ไม่สามารถดึงตำแหน่งได้ จะแสดงแผนที่เริ่มต้นแทน"); 
           setRadiusKm(50);
-          setIsLoadingLoc(false);
         },
         { enableHighAccuracy: true, timeout: 10000 }
       );
     } else {
       console.warn("บราวเซอร์ของคุณไม่รองรับ");
       setRadiusKm(50);
-      setIsLoadingLoc(false);
     }
   }, []);
 
@@ -77,17 +79,6 @@ const HotelMap = () => {
     else if (radiusKm <= 100) setZoom(9);
     else setZoom(8);
   }, [radiusKm]);
-
-  // คำนวณขนาดภาพแผนที่ให้พอดีกับหน้าจอ
-  // จำกัดความกว้างสูงสุดที่ 640px (ตามข้อจำกัดของ Google Static Maps แบบฟรี)
-  const getMapSize = () => {
-    const width = Math.min(window.innerWidth, 640);
-    const height = Math.min(window.innerHeight, 640); 
-    return `${Math.floor(width)}x${Math.floor(height)}`;
-  };
-
-  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${userLoc.lat},${userLoc.lng}&zoom=${zoom}&size=${getMapSize()}&maptype=roadmap&markers=color:red%7Clabel:Me%7C${userLoc.lat},${userLoc.lng}&key=${API_KEY}`;
-
 
   const handleHotelClick = async () => {
     if (userLoc.lat && userLoc.lng) {
@@ -127,22 +118,35 @@ const HotelMap = () => {
     <div className="app-container bg-slate-200">
       <TopNavbar />
       
-      {/* ================= แผนที่ ================= */}
-      <div 
-        className="fixed inset-0 bg-cover bg-center z-0" 
-        style={{ backgroundImage: `url("${mapUrl}")` }}
-      >
-        {isLoadingLoc && (
-          <div className="w-full h-full bg-white/70 flex justify-center items-center font-bold text-slate-800">
-            📍 กำลังค้นหาตำแหน่งของคุณ...
+      {/* 🌟 3. แสดงผลแผนที่จริงแบบ Interactive เลื่อนได้ ซูมได้ */}
+      <div className="fixed inset-0 z-0">
+        {!isLoaded ? (
+          <div className="w-full h-full bg-slate-100 flex justify-center items-center font-bold text-slate-800">
+            📍 กำลังโหลดแผนที่...
           </div>
+        ) : (
+          <GoogleMap
+            mapContainerStyle={{ width: '100%', height: '100%' }}
+            center={userLoc}
+            zoom={zoom}
+            options={{
+              disableDefaultUI: true, // ซ่อนปุ่มรกๆ ของ Google
+              zoomControl: true, // เปิดปุ่มซูม +-
+              gestureHandling: 'greedy' // ใช้นิ้วเดียวลากแผนที่ในมือถือได้เลย
+            }}
+          >
+            {/* ปักหมุดตำแหน่งผู้ใช้งาน */}
+            <Marker position={userLoc} />
+          </GoogleMap>
         )}
       </div>
 
-      <div className="main-content flex flex-col h-full relative z-10 !pt-[70px] !pb-[80px]">
+      {/* 🌟 4. เพิ่ม pointer-events-none เพื่อให้สัมผัสทะลุไปโดนแผนที่ได้ */}
+      <div className="main-content flex flex-col h-full relative z-10 !pt-[70px] !pb-[80px] pointer-events-none">
         
         {/* ================= Header ================= */}
-        <div className="bg-white rounded-b-2xl shadow-md">
+        {/* ใส่ pointer-events-auto ให้เฉพาะส่วนที่ต้องการให้กดได้ */}
+        <div className="bg-white rounded-b-2xl shadow-md pointer-events-auto">
           <div className="flex items-center p-4 gap-4">
             <button onClick={() => navigate(-1)} className="bg-transparent border-none p-0">
               <ChevronLeft size={28} className="text-gray-800" />
@@ -179,21 +183,17 @@ const HotelMap = () => {
           </div>
         </div>
 
-        {/* ================= Pin ================= */}
+        {/* ================= Pin จำลองตรงกลาง (ลบทิ้งได้เลยเพราะใช้ <Marker /> ของจริงแทนแล้ว) ================= */}
         <div className="flex-1 relative">
-          <div className="absolute bottom-[40%] left-[20%]">
-             <div className="bg-white text-blue-600 px-4 py-2 rounded-full font-bold text-base border-2 border-blue-600 shadow-lg relative">
-               ฿ 1,142
-             </div>
-             <p className="m-0 mt-1 text-[11px] text-purple-700 font-bold text-center drop-shadow-[1px_1px_0_white]">ที่พักใกล้คุณ</p>
-          </div>
+           {/* ตรงนี้เคยมีป้ายราคาลอยๆ ตอนนี้ผมเอาออกให้เพื่อให้แผนที่โล่งๆ สวยๆ ครับ */}
         </div>
 
         {/* ================= การ์ดโรงแรม ================= */}
+        {/* ใส่ pointer-events-auto ให้การ์ดสามารถคลิกได้ */}
         {showCard && (
           <div 
             onClick={handleHotelClick} 
-            className="absolute bottom-[80px] left-4 right-4 z-20 bg-white rounded-2xl p-4 flex gap-4 shadow-xl cursor-pointer animate-[slideUp_0.3s_ease-out]"
+            className="absolute bottom-[80px] left-4 right-4 z-20 bg-white rounded-2xl p-4 flex gap-4 shadow-xl cursor-pointer animate-[slideUp_0.3s_ease-out] pointer-events-auto"
           >
             <div className="w-[100px] h-[100px] rounded-xl overflow-hidden relative shrink-0">
               <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=300&q=80" alt="Hotel" className="w-full h-full object-cover" />
