@@ -78,7 +78,15 @@ const HotelMap = () => {
     else setZoom(8);
   }, [radiusKm]);
 
-  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${userLoc.lat},${userLoc.lng}&zoom=${zoom}&size=600x800&maptype=roadmap&markers=color:red%7Clabel:Me%7C${userLoc.lat},${userLoc.lng}&key=${API_KEY}`;
+  // คำนวณขนาดภาพแผนที่ให้พอดีกับหน้าจอ
+  // จำกัดความกว้างสูงสุดที่ 640px (ตามข้อจำกัดของ Google Static Maps แบบฟรี)
+  const getMapSize = () => {
+    const width = Math.min(window.innerWidth, 640);
+    const height = Math.min(window.innerHeight, 640); 
+    return `${Math.floor(width)}x${Math.floor(height)}`;
+  };
+
+  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${userLoc.lat},${userLoc.lng}&zoom=${zoom}&size=${getMapSize()}&maptype=roadmap&markers=color:red%7Clabel:Me%7C${userLoc.lat},${userLoc.lng}&key=${API_KEY}`;
 
 
   const handleHotelClick = async () => {
