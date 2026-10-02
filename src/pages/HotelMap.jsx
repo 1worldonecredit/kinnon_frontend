@@ -79,6 +79,7 @@ const HotelMap = () => {
   }, [radiusKm]);
 
   const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${userLoc.lat},${userLoc.lng}&zoom=${zoom}&size=600x800&maptype=roadmap&markers=color:red%7Clabel:Me%7C${userLoc.lat},${userLoc.lng}&key=${API_KEY}`;
+  console.log("MAP URL:", mapUrl);
 
   const handleHotelClick = async () => {
     if (userLoc.lat && userLoc.lng) {
