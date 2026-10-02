@@ -24,20 +24,21 @@ const HotelMap = () => {
 
   const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-  // ดึงตำแหน่งของผู้ใช้งานเมื่อเปิดหน้านี้
+ // ดึงตำแหน่งของผู้ใช้งานเมื่อเปิดหน้านี้
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLoc({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
+          const currentLat = position.coords.latitude;
+          const currentLng = position.coords.longitude;
+          
+          setUserLoc({ lat: currentLat, lng: currentLng });
           setIsLoadingLoc(false);
+          
+          // ✅ ยิงพิกัดอัปเดตฐานข้อมูลเบื้องหลังทันทีที่ได้ค่ามา
+          saveLocationToDB(currentLat, currentLng);
         },
         (error) => {
-          console.error("Error getting location:", error);
-          // เอา alert ออกชั่วคราวเพื่อไม่ให้กวนใจเวลาเทสในคอมพิวเตอร์
           console.warn("ไม่สามารถดึงตำแหน่งได้ จะแสดงแผนที่เริ่มต้นแทน"); 
           setIsLoadingLoc(false);
         },
@@ -60,6 +61,25 @@ const HotelMap = () => {
 
   // สร้าง URL ของ Google Maps Static API (ปักหมุดสีแดงที่ตำแหน่งผู้ใช้)
   const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${userLoc.lat},${userLoc.lng}&zoom=${zoom}&size=600x800&maptype=roadmap&markers=color:red%7Clabel:Me%7C${userLoc.lat},${userLoc.lng}&key=${API_KEY}`;
+
+ // เอาฟังก์ชันนี้ไว้ในคอมโพเนนต์ HotelMap เหมือนเดิม แต่รับค่าพิกัดเข้ามาโดยตรง
+  const saveLocationToDB = async (lat, lng) => {
+    try {
+      await fetch('https://apibooking.smartsoft.agency/api/save-location', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: 1, 
+          label: searchLocation, // คำค้นหา
+          latitude: lat,
+          longitude: lng
+        })
+      });
+      // ✅ ไม่ต้องใส่ alert() ใดๆ ให้รบกวนผู้ใช้
+    } catch (error) {
+      console.error('Silent Error saving location:', error);
+    }
+  };
 
   return (
     <div className="app-container" style={{ backgroundColor: '#e2e8f0', position: 'relative' }}>
